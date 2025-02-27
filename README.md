@@ -46,8 +46,8 @@ If you have issues running the above on your development machine or prefer
 not to install dependencies locally, we offer a public Docker
 image that is ready to run out-of-the-box.
 Ensure your Docker engine is configured to allow
-adequate space and memory (under System->Resources) or you might see it being `Killed`.
+adequate space and memory (under System-->Resources) or you might see it being `Killed`.
 
 ```sh
 docker run --gpus all --pull=always -it --rm europe-docker.pkg.dev/gensyn-public-b7d9/public/rl-swarm:v0.0.1 ./run_hivemind_docker.sh
-``
+```
