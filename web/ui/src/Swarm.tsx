@@ -230,7 +230,7 @@ export default function Swarm() {
             <p class="uppercase">Models in the swarm receive rewards based on the following criteria:</p>
             <ul class="mt-4 uppercase">
                 <li class="mb-2"><strong>Formatted &rarr;</strong> does the model generate output matching the specified format?</li>
-                <li class="mb-2"><strong>Correct &rarr;</strong> is the final anaswer mathematically correct and formatted correctly?</li>
+                <li class="mb-2"><strong>Correct &rarr;</strong> is the final answer mathematically correct and formatted correctly?</li>
                 <li><strong>Insightful &rarr;</strong> in stages requiring reference to best messages from prior rounds, does the model reference those messages, and do they meet the reward criteria for that round?</li>
             </ul>
             <p class="uppercase text-center mt-4 mb-4">* * *</p>
