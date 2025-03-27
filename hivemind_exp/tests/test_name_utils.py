@@ -9,10 +9,10 @@ def test_get_name_from_uuid():
     id0 = uuid.UUID(TEST_UUIDS[0])
     id1 = uuid.UUID(TEST_UUIDS[1])
     id2 = uuid.UUID(TEST_UUIDS[2])
-    assert get_name_from_uuid(str(id0)) == "yapping pigeon"
-    assert get_name_from_uuid(str(id1)) == "lumbering monkey"
-    assert get_name_from_uuid(str(id2)) == "twitchy hamster"
+    assert get_name_from_uuid(str(id0)) == "scavenging owl"
+    assert get_name_from_uuid(str(id1)) == "stocky ladybug"
+    assert get_name_from_uuid(str(id2)) == "playful caribou"
 
 def test_search_():
     assert search_uuid_for_name(TEST_UUIDS, "none") is None
-    assert search_uuid_for_name(TEST_UUIDS, "lumbering monkey") == TEST_UUIDS[1]
+    assert search_uuid_for_name(TEST_UUIDS, "stocky ladybug") == TEST_UUIDS[1]

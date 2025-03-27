@@ -67,10 +67,13 @@ ANIMALS = [
     "woodpecker", "worm", "yak", "zebra"
 ]
 
+def hex_to_ints(s, k=2):
+    return tuple(int(s[i:i+k], 16) for i in range(0, len(s), k))
+
 @lru_cache
 def get_name_from_uuid(uuid: str):
-    i = int(hashlib.md5(uuid.encode()).hexdigest(), 16)
-    return f"{ADJECTIVES[i % len(ADJECTIVES)]} {ANIMALS[i % len(ANIMALS)]}"
+    ints = hex_to_ints(hashlib.md5(uuid.encode()).hexdigest())
+    return f"{ADJECTIVES[ints[0] % len(ADJECTIVES)]} {ANIMALS[ints[1] % len(ANIMALS)]}"
 
 def search_uuid_for_name(uuids: Sequence[str], name):
     for uuid in uuids:
