@@ -111,7 +111,7 @@ def grpo_function(
     dht = hivemind.DHT(start=True, **dht_kwargs)
     
     
-    print("PEERID!!!!!!!", dht.peer_id)
+    logger.info(f"PEERID: {dht.peer_id}")
 
     while os.path.exists(f"modal-login/temp-data/userData.json") == False:
         print("Waiting for userData.json to be created...")
