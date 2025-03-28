@@ -1,5 +1,5 @@
 FROM europe-docker.pkg.dev/gensyn-main/registry/nvidia-cuda:12.6.3-cudnn-devel-ubuntu24.04 AS base
-LABEL Christopher Nies <christopher@gensyn.ai>"
+LABEL maintainer="Christopher Nies <christopher@gensyn.ai>"
 
 # Common libraries used by Python. These pre-requisited are recommended for the general Python
 RUN apt update -y && \
@@ -41,6 +41,6 @@ RUN ./setup_python.sh
 RUN pip install  --user -r rl_swarm/requirements-hivemind.txt && \ 
     pip install  --user -r rl_swarm/requirements.txt
 
-COPY --chown=gensyn ./python/rl_swarm /home/gensyn/rl_swarm
+COPY --chown=gensyn . /home/gensyn/rl_swarm
 
 WORKDIR /home/gensyn/rl_swarm

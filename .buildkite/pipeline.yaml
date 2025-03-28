@@ -58,9 +58,9 @@ steps:
         command: |
           .buildkite/tools/build-oci-image.sh \
             --output type=image,push=true,name=europe-docker.pkg.dev/gensyn-main/registry/rl-swarm:$$IMAGE_TAG \
-            --local dockerfile=/workdir/containerfiles/rl-swarm \
+            --local dockerfile=/workdir/private-containerfiles/swarm-node \
             --local context=/workdir \
-            --opt filename=./rl-swarm-repop.containerfile \
+            --opt filename=./swarm-node.containerfile \
             --export-cache type=registry,ref=europe-docker.pkg.dev/gensyn-main/registry/rl-swarm:cache-$$IMAGE_TAG,image-manifest=true,mode=max \
             --import-cache type=registry,ref=europe-docker.pkg.dev/gensyn-main/registry/rl-swarm:cache-$$IMAGE_TAG \
             --import-cache type=registry,ref=europe-docker.pkg.dev/gensyn-main/registry/rl-swarm:cache-main
