@@ -17,6 +17,7 @@ from hivemind_exp.dht_utils import (
     rewards_key,
 )
 from hivemind_exp.utils import HivemindNode, StageData
+from hivemind_exp.name_utils import get_name_from_uuid
 
 logger = logging.getLogger(__name__)
 
@@ -86,7 +87,7 @@ class HivemindGRPOTrainer:
                 value=self.stage_rewards,
                 expiration_time=get_dht_time() + self.node.out_expiration,
             )
-            if self.node.is_coordinator():
+            if self.node.is_coordinator:
                 self.publish_leaderboard()
 
             return loss
@@ -109,16 +110,14 @@ class HivemindGRPOTrainer:
         self.stage_data = stage_data
 
         self.config = config
+        self.config.output_dir += f"-{get_name_from_uuid(str(self.node.uuid))}" #TODO: Add animal name to save path in more appropriate spot
         self.model = model
         self.tokenizer = tokenizer
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token
 
     def _log_tag(self):
-        node_uuid = self.node.uuid
-        if self.node.is_coordinator():
-            return f"[C-{node_uuid}]"
-        return f"[F-{node_uuid}]"
+        return f"[{self.node.uuid}]"
 
     def wait_for(self, result_fn=lambda: None, interval=10, timeout=30):
         start_time = time.monotonic()
@@ -198,16 +197,26 @@ class HivemindGRPOTrainer:
         trainer.model.config.use_cache = True
         trainer.save_model(self.config.output_dir)
         logger.info(f"{tag} Model saved to {self.config.output_dir}")
+        assert self.config.distributed_state
         self.config.distributed_state.wait_for_everyone()  # wait for all processes to load
 
         self.tokenizer.save_pretrained(self.config.output_dir)
         logger.info(f"{tag} Tokenizer saved to {self.config.output_dir}")
 
-        # Save everything else on main process
+        # Push to HF hub if desired
         if trainer.accelerator.is_main_process:
             trainer.create_model_card(
-                {"tags": ["rl", "grpo", "tutorial", "philschmid"]}
+                {"tags": ["rl", "grpo", "gensyn", "swarm"]}
             )
+        if (self.config.push_to_hub_token != None): #TODO: Come back and add additional logic checking if they've provided access token+HF username
+            logger.info("Pushing model to Hugging Face Hub...")
+            try:
+                trainer.push_to_hub()
+            except:
+                logger.info("Failed to push model to the Hugging Face Hub. When you conclude training please try manually pushing it yourself using the instructions here: https://huggingface.co/docs/hub/en/models-uploading")
+
+    def get_round_and_stage(self):
+        return get_round_and_stage(self.dht)
 
     def coordinator_train(self):
         tag = self._log_tag()
@@ -241,10 +250,10 @@ class HivemindGRPOTrainer:
 
             # Retrieve current round and stage.
             try:
-                round_num, stage = get_round_and_stage(self.dht)
-            except:
+                round_num, stage = self.get_round_and_stage()
+            except Exception as e:
                 if curr_time - fetch_log_time > 5:
-                    logger.info(f"{tag} Could not fetch round and stage. Skipping.")
+                    logger.debug(f"{tag} Could not fetch round and stage: {e}")
                     fetch_log_time = curr_time
 
                 time.sleep(check_interval)
@@ -268,12 +277,12 @@ class HivemindGRPOTrainer:
 
     def train(self):
         try:
-            if self.node.is_coordinator():
+            if self.node.is_coordinator:
                 self.coordinator_train()
             else:
                 self.follower_train()
 
-        except:
+        except Exception:
             import traceback
 
             traceback.print_exc()
