@@ -31,6 +31,7 @@ WORKDIR /home/gensyn
 
 COPY ./private-containerfiles/swarm-node/versions.json ./versions.json
 COPY ./private-containerfiles/swarm-node/setup_python.sh ./setup_python.sh
+COPY ./private-containerfiles/swarm-node/install_pip.sh ./install_pip.sh
 COPY ./requirements.txt ./requirements.txt
 COPY ./requirements-hivemind.txt ./requirements-hivemind.txt
 
@@ -38,8 +39,7 @@ COPY ./requirements-hivemind.txt ./requirements-hivemind.txt
 USER gensyn
 
 RUN ./setup_python.sh
-RUN pip install  --user -r rl_swarm/requirements-hivemind.txt && \ 
-    pip install  --user -r rl_swarm/requirements.txt
+RUN ./install_pip.sh
 
 COPY --chown=gensyn . /home/gensyn/rl_swarm
 
