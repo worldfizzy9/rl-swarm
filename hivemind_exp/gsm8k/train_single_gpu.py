@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 import logging
 import hivemind
+import time
 
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from trl import GRPOConfig, ModelConfig, TrlParser
@@ -10,9 +11,9 @@ from hivemind_exp.gsm8k.generate_prompts import *
 from hivemind_exp.gsm8k.stage_merger import *
 from hivemind_exp.trainer.hivemind_grpo_trainer import HivemindGRPOTrainer
 from hivemind_exp.utils import HivemindNode
-
 from hivemind_exp.gsm8k.stage_utils import gsm8k_stage_data
 
+from hivemind_exp.chain_utils import register_peer_via_api
 
 ########################
 # Custom dataclasses
@@ -108,6 +109,21 @@ def grpo_function(
         dht_kwargs["identity_path"] = identity_path
 
     dht = hivemind.DHT(start=True, **dht_kwargs)
+    
+    
+    print("PEERID!!!!!!!", dht.peer_id)
+
+    while os.path.exists(f"modal-login/temp-data/userData.json") == False:
+        print("Waiting for userData.json to be created...")
+        time.sleep(5)
+
+    result = None
+    while result is None:
+        #result = register_peer_via_api(str('harrytester'))
+        result = register_peer_via_api(str(dht.peer_id))
+        time.sleep(10)
+        print(result)
+
     if initial_peer:
         print(f"Joining swarm with initial_peer = {initial_peer}")
     else:

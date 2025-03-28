@@ -30,6 +30,7 @@ echo "Please login to create an Ethereum Server Wallet"
 cd modal-login
 yarn install
 yarn dev > /dev/null 2>&1 & # Run in background and suppress output
+#yarn dev &
 SERVER_PID=$!  # Store the process ID
 sleep 5
 open http://localhost:3000
@@ -39,6 +40,7 @@ cd ..
 cleanup() {
     echo "Shutting down server..."
     kill $SERVER_PID
+    rm -r modal-login/temp-data/*.json
     exit 0
 }
 
