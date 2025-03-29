@@ -99,7 +99,7 @@ class ModalSwarmCoordinator(SwarmCoordinator):
         try:
             send_via_api(
                 self.org_id,
-                "submit-winner",
+                "submit-winners",
                 {"roundNumber": round_num, "winners": winners},
             )
         except requests.exceptions.HTTPError as e:

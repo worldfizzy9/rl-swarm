@@ -106,9 +106,9 @@ export default function Home() {
             onClick={async () => {
               setIsSubmitting(true);
               try {
-                const resp = await fetch("/api/submit-winner", {
+                const resp = await fetch("/api/submit-winners", {
                   method: "POST",
-                  body: JSON.stringify({ orgId: user.orgId }),
+                  body: JSON.stringify({ orgId: user.orgId, roundNumber: 0, winners: ["test"] }),
                 });
                 const respJson = await resp.json();
                 console.log(respJson);
