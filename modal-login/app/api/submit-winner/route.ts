@@ -81,9 +81,12 @@ export async function POST(request: Request) {
       policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID!,
     });
 
+  const contractAdrr = process.env.SMART_CONTRACT_ADDRESS! as `0x${string}`;
+
+
     const { hash } = await client.sendUserOperation({
       uo: {
-        target: "0x6484a07281B72b8b541A86Ec055534223672c2fb",
+        target: contractAdrr,
         data: encodeFunctionData({
           abi: [
             {
