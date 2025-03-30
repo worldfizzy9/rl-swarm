@@ -1,5 +1,8 @@
 #!/bin/bash
 
+source /home/gensyn/.profile
+set -euo pipefail
+
 #General args
 ROOT=$PWD
 
