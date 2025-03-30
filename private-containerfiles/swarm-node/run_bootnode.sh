@@ -3,12 +3,7 @@
 #General args
 ROOT=$PWD
 
-export IDENTITY_PATH
-
-# Path to an RSA private key. If this path does not exist, a new key pair will be created.
-# Remove this file if you want a new PeerID.
-DEFAULT_IDENTITY_PATH="$ROOT"/swarm.pem
-IDENTITY_PATH=${IDENTITY_PATH:-$DEFAULT_IDENTITY_PATH}
+export CONFIG_PATH
 
 #lets go!
 echo "Getting requirements..."
@@ -24,4 +19,6 @@ echo "Good luck in the swarm!"
 python -m hivemind_exp.gsm8k.train_single_gpu \
     --identity_path "$IDENTITY_PATH" \
     --wallet_private_key "$WALLET_PRIVATE_KEY" \
+    --public_maddr "$PUB_MULTI_ADDRS" \
+    --host_maddr "$HOST_MULTI_ADDRS" \
     --config "$CONFIG_PATH"
