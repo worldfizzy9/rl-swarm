@@ -2,6 +2,7 @@ import { TurnkeyClient } from "@turnkey/http";
 import { ApiKeyStamper } from "@turnkey/api-key-stamper";
 import { getLatestApiKey, getUser } from "@/app/db";
 import { NextResponse } from "next/server";
+
 import {
   Address,
   createWalletClient,
@@ -23,12 +24,13 @@ const TURNKEY_BASE_URL = "https://api.turnkey.com";
 const ALCHEMY_BASE_URL = "https://api.g.alchemy.com";
 
 export async function POST(request: Request) {
-  const body: { orgId: string; peerId: string } = await request
+  const body: { orgId: string; roundNumber: bigint; winners: string[] } = await request
     .json()
     .catch((err) => {
       console.error(err);
+      console.log(body)
       return NextResponse.json(
-        { error: "bad request" },
+        { error: "bad request generic" },
         {
           status: 400,
         },
@@ -36,7 +38,7 @@ export async function POST(request: Request) {
     });
   if (!body.orgId) {
     return NextResponse.json(
-      { error: "bad request" },
+      { error: "bad request orgID" },
       {
         status: 400,
       },
@@ -104,7 +106,7 @@ export async function POST(request: Request) {
             },
           ],
           functionName: "submitWinners",
-          args: [BigInt(0), ["grievepeer"]], // Your function arguments
+          args: [body.roundNumber, body.winners], // Your function arguments
         }),
       },
     });
