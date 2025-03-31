@@ -64,7 +64,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center gap-4 justify-center text-center">
-      {signerStatus.isInitializing ? (
+      {(signerStatus.isInitializing || (user && !createdApiKey)) ? (
         <>Loading...</>
       ) : user ? (
         <div className="card">
