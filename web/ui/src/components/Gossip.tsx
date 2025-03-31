@@ -37,6 +37,18 @@ export default function Gossip() {
 		)
 	}
 
+	const reAnswer = new RegExp(/\.\.\.Answer:.+$/)
+	const reMajority = new RegExp(/\.\.\.Majority:.+$/)
+	const reIdentify = new RegExp(/\.\.\.Identify:.+$/)
+
+	const processMessage = (message: string) => {
+		// Replace each pattern with a bold version
+		return message
+			.replace(reAnswer, (match) => `<strong>${match}</strong>`)
+			.replace(reMajority, (match) => `<strong>${match}</strong>`)
+			.replace(reIdentify, (match) => `<strong>${match}</strong>`)
+	}
+
 	return (
 		<section class="flex flex-grow flex-col gap-2">
 			<SectionHeader title="gossip" tooltip={GossipTooltip()} />
@@ -47,7 +59,7 @@ export default function Gossip() {
 						ctx.gossipMessages().map((msg) => {
 							return (
 								<li class="mt-4">
-									<NodeMessage id={msg.node} message={msg.message} />
+									<NodeMessage id={msg.node} message={processMessage(msg.message)} />
 								</li>
 							)
 						})
@@ -63,21 +75,12 @@ export default function Gossip() {
 }
 
 function NodeMessage(props: { id: string; message: string }) {
-	const reAnswer = new RegExp(/Answer:.+$/)
-
-	const match = props.message.match(reAnswer)
-
-	let mainText = props.message
-	let answer = ""
-
-	if (match) {
-		mainText = mainText.slice(0, props.message.length - match[0].length)
-		answer = match[0]
-	}
-
 	return (
-		<p class="uppercase">
-			<span class="text-gensyn-green">[{props.id}]</span> {mainText} <strong>{answer}</strong>
-		</p>
+		<div class="flex flex-col">
+			<div class="flex-none">
+				<span class="uppercase tracking-tightest text-xs tracking-[-0.25em]">{props.id}</span>
+			</div>
+			<div class="flex-none mt-1" innerHTML={props.message} />
+		</div>
 	)
 }
