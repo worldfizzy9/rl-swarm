@@ -42,6 +42,11 @@ if [ "$CONNECT_TO_TESTNET" = "True" ]; then
     # run modal_login server
     echo "Please login to create an Ethereum Server Wallet"
     cd modal-login
+    # Check if the yarn command exists; if not, install Yarn.
+    if ! command -v yarn >/dev/null 2>&1; then
+      echo "Yarn is not installed. Installing Yarn..."
+      curl -o- -L https://yarnpkg.com/install.sh | sh
+    fi
     yarn install
     yarn dev > /dev/null 2>&1 & # Run in background and suppress output
 
