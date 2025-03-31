@@ -24,4 +24,5 @@ python -m hivemind_exp.gsm8k.train_single_gpu \
     --wallet_private_key "$WALLET_PRIVATE_KEY" \
     --public_maddr "$PUB_MULTI_ADDRS" \
     --host_maddr "$HOST_MULTI_ADDRS" \
+    --initial_peers "BOOT" \
     --config "$CONFIG_PATH"
