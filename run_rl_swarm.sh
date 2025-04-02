@@ -121,6 +121,7 @@ else
    esac
 fi
 
+ulimit -n 100000
 echo ""
 echo ""
 echo "Good luck in the swarm!"
